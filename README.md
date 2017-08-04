@@ -76,4 +76,10 @@ Check out the files in `/examples` for other ideas for implementation.
 
 ## Testing
 
-Unit tests on this project are run using Mocha. You can find each test in the `/tests` folder.  
+Unit tests on this project are run using Mocha. You can find each test in the `/test` folder.
+
+After doing an npm install mocha, and chai will be available to run using the following command. 
+
+```bash
+./node_modules/.bin/mocha --reporter spec
+```  
