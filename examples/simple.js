@@ -17,6 +17,11 @@ const payload = new itransact.transactionPostPayloadModel();
 payload.amount = '1000';
 payload.card = cardData;
 
+// IF you want to just sign the payload
+let payloadSignature = itransact.signPayload(api_key, payload);
+
+
+// If you want to post a card transaction
 let fooCallback = function (response) {
     // Do something with response here
 };

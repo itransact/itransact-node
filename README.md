@@ -57,6 +57,30 @@ let fooCallback = function (response) {
 itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
 ```
 
+#### Simple sign payload
+```javascript
+"use strict";
+const itransact = require('itransact-core');
+
+// Store this somewhere safe.
+const api_key = 'test_apikey';
+
+// You can use your own JSON Model, or use the included models.
+const payload = {
+    amount: '1000',
+    card:{
+        name: 'Greg',
+        number: '4111111111111111',
+        cvv: '123',
+        exp_month: '11',
+        exp_year: '2020'
+    }
+};
+
+// IF you want to just sign the payload
+let payloadSignature = itransact.signPayload(api_key, payload);
+```
+
 *Note - expected signature changes every time the api_username, api_key, and payload changes in any way. It is only included here for testing.* 
 
 
