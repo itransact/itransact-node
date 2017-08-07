@@ -4,8 +4,8 @@ var CardData = function (){
     this.name = null;
     this.number = null;
     this.cvv = null;
-    this.expMonth = null;
-    this.expYear = null;
+    this.exp_month = null;
+    this.exp_year = null;
 };
 
 module.exports = CardData;

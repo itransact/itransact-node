@@ -13,20 +13,19 @@ const expect = require('chai').expect;
 describe('iTransact Core', function () {
     const iTransactCore = require('../itransact-core');
 
-    const apiUsername = "ac_Tyuw5U88";
-    const apiKey = "EH92cWP4gR7KC8GvNen6";
-    const usernameEncoded = "123";
-    const expectedSignature = 'ClXzIZnwP0LEkd9FMXcfktBEU6wGyQQLE0PZIPsUafE=';
+    const apiUsername = "test_user";
+    const apiKey = "test_key";
+    const expectedSignature = 'dmMH2rT4LUP25xeMsW1i+zLX4sXgtoUFoXpZk2zIuyg='; // Changes when api key, username, or payload changes.
 
     let payload = new iTransactCore.transactionPostPayloadModel();
     let cardData = new iTransactCore.cardDataModel();
 
     beforeEach(function () {
         cardData.name = 'Greg';
-        cardData.number = '41111111111111111';
+        cardData.number = '4111111111111111';
         cardData.cvv = '123';
-        cardData.expMonth = '11';
-        cardData.expYear = '2020';
+        cardData.exp_month = '11';
+        cardData.exp_year = '2020';
 
         payload.amount = '1000';
         payload.card = cardData;
@@ -35,30 +34,6 @@ describe('iTransact Core', function () {
     afterEach(function () {
         payload = new iTransactCore.transactionPostPayloadModel();
         cardData = new iTransactCore.cardDataModel();
-    });
-
-    describe('#getJSON()', function () {
-        it('should return a valid statusCode and a json object', function (done) {
-            // TODO - this section should just snag some object as a get request.
-            const options = {
-                host: 'api.itransact.com',
-                port: 443,
-                path: '/transactions',
-                method: 'POST',
-                headers: {
-                    'Authorization': `${usernameEncoded}:${iTransactCore.signPayload(apiKey,payload)} `,
-                    'Content-Type': 'application/json'
-                }
-            };
-
-            // iTransactCore.getJSON(options, function (statusCode, object) {
-                // TODO - get the proper return type.
-                //expect(statusCode).to.equal(401);
-
-                // done();
-            // });
-            done();
-        });
     });
 
     describe('#signPayload()', function () {
@@ -80,24 +55,30 @@ describe('iTransact Core', function () {
 
     // Rest tests
     describe('#postCardTransaction()', function () {
-        it('should get a xyz when talking to server with valid credentials', function (done) {
-            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
-                // TODO - push the right stuff
-                expect(response.statusCode).to.equal(200);
-
-                done();
-            });
-
-        });
-
-        it('should get a 401 when talking to server with invalid credentials', function (done) {
-            iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
-                expect(response.statusCode).to.equal(401);
-                done();
-            });
-
-        });
-
+        // it('should get a xyz when talking to server with valid credentials', function (done) {
+        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+        //         expect(response.statusCode).to.equal(200);
+        //         done();
+        //     });
+        //
+        // });
+        //
+        // it('should get a 401 when talking to server with invalid credentials', function (done) {
+        //     iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
+        //         expect(response.statusCode).to.equal(401);
+        //         done();
+        //     });
+        //
+        // });
+        //
+        // it('should get a 402 when talking to server with past due account credentials', function (done) {
+        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+        //         expect(response.statusCode).to.equal(402);
+        //         done();
+        //     });
+        //
+        // });
+        //
         // it('should get a 400 when talking to server with bad data', function (done) {
         //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
         //         expect(serverResponse.statusCode).to.equal(400);

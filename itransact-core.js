@@ -2,8 +2,7 @@
 
 // External requirements
 const crypto = require('crypto');
-const http = require('http');
-const https = require('https');
+const request = require('request');
 
 // Endpoints
 const base_endpoint = 'api.itransact.com';
@@ -17,49 +16,24 @@ exports.cardDataModel = require('./models/card-data');
 exports.transactionPostPayloadModel = require('./models/transaction-post-payload');
 
 // Exports
-exports.getJSON = function (options, onResult) {
-    const port = options.port === 443 ? https : http;
-    const req = port.request(options, function (res) {
-        console.log(options.host + ':' + res.statusCode);
-
-        let output = '';
-        res.setEncoding('utf8');
-
-        res.on('data', function (chunk) {
-            output += chunk;
-        });
-
-        res.on('end', function () {
-            const obj = JSON.parse(output);
-            onResult(res.statusCode, obj);
-        });
-    });
-
-    req.on('error', function (err) {
-        console.error(err);
-    });
-
-    req.end();
-};
-
 exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) {
     const usernameEncoded = new Buffer(apiUsername).toString('base64');
     const payloadSignature = exports.signPayload(apiKey, payload);
     const payloadJsonString = JSON.stringify(payload);
 
-    const options = {
-        host: base_endpoint,
-        port: 443,
-        path: transactions_post_endpoint,
+
+    request({
         method: 'POST',
+        uri: 'https://' + base_endpoint + transactions_post_endpoint,
         headers: {
             'Authorization': `${usernameEncoded}:${payloadSignature} `,
             'Content-Type': 'application/json',
-            'Content-Length': payloadJsonString.length
-        }
-    };
-
-    http.request(options, callback).write(payloadJsonString);
+            'User-Agent': `Node.js ${process.version}`
+        },
+        body: payloadJsonString
+    }, function (error, response, body) {
+        callback(response);
+    });
 };
 
 exports.signPayload = function (apiKey, payload) {
