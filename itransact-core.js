@@ -6,8 +6,8 @@ const http = require('http');
 const https = require('https');
 
 // Internal models.
-const CardData = require('./models/CardData');
-const TransactionPostPayload = require('./models/TransactionPostPayload');
+const CardData = require('./models/card-data');
+const TransactionPostPayload = require('./models/transaction-post-payload');
 
 // Endpoints
 const base_endpoint = 'api.itransact.com';
@@ -42,7 +42,7 @@ exports.getJSON = function (options, onResult) {
     req.end();
 };
 
-exports.postCardTransaction = function (payload, apiUsername, apiKey) {
+exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) {
     const usernameEncoded = new Buffer(apiUsername).toString('base64');
     const payloadSignature = exports.signPayload(apiKey, payload);
 
@@ -55,44 +55,19 @@ exports.postCardTransaction = function (payload, apiUsername, apiKey) {
             'Authorization': `${usernameEncoded}:${payloadSignature} `,
             'Content-Type': 'application/json'
         },
-        body: payload // TODO - make sure to stringify the json object
+        body: JSON.stringify(payload)
     };
 
+    // TODO - I believe there is an issue with the payload being sent. Perhaps need to trim on the server side?
+
     exports.getJSON(options, function (statusCode, object) {
-        console.log('Not implemented yet')
+        // Bubble up response
+        callback(statusCode, object);
     });
-
-    // TODO - send to the server.
-
 };
 
 exports.signPayload = function (apiKey, payload) {
     // Return payload and signature on that object.
-    console.log(JSON.stringify(payload));
     const hmac = crypto.createHmac('sha256', apiKey).update(JSON.stringify(payload));
     return hmac.digest('base64');
 };
-
-
-///////
-// Move these to formalized mocha tests.
-///////
-const apiUsername = "test_account";
-const apiKey = "EH92cWP4gR7KC8GvNen6";
-
-// Create card data
-let cardDataModel = new CardData();
-cardDataModel.name = "Greg";
-cardDataModel.number = "41111111111111111";
-cardDataModel.cvv = "123";
-cardDataModel.expMonth = "11";
-cardDataModel.expYear = "2020";
-
-// Create payload
-let transactionPayload = new TransactionPostPayload();
-transactionPayload.amount = "1000";
-transactionPayload.card = cardDataModel;
-
-// Submit payload
-// console.log(exports.signPayload(apiKey, transactionPayload));
-exports.postCardTransaction(transactionPayload, apiUsername, apiKey);

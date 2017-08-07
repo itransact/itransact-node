@@ -4,14 +4,15 @@
 const crypto = require('crypto');
 
 // Store this somewhere safe.
-const api_key = '12345678901234567890';
+const api_key = 'test_apikey';
 
 // Note - As the payload or key changes, the expectedSignature also changes
-const expectedSignature = '5lTFvrCxPdRobSO9kDkfKnFpBhzd6gIv3j9gYcm5sRU=';
+const expectedSignature = 'CtWScJ95V4lRZ181QN1iriN4EGyX1YMU2pkvDlh7dKE=';
 const exampleJsonPayload = {
     'amount': '1000',
     'card': {
-        'number': '4111111111111111',
+        'name': 'Greg',
+        'number': '41111111111111111',
         'cvv': '123',
         'exp_month': '11',
         'exp_year': '2020'
