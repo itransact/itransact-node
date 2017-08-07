@@ -17,7 +17,7 @@ Run the following command at the root fo your project
 npm install itransact-node
 ```
 
-[iTransact SDK on NPM]()
+[iTransact SDK on NPM](https://www.npmjs.com/package/itransact-node)
 
 
 ### Manual Install
