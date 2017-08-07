@@ -12,16 +12,14 @@ const expect = require('chai').expect;
 
 describe('iTransact Core', function () {
     const iTransactCore = require('../itransact-core');
-    const CardDataModel = require('../models/card-data');
-    const Payload = require('../models/transaction-post-payload');
 
     const apiUsername = "ac_Tyuw5U88";
     const apiKey = "EH92cWP4gR7KC8GvNen6";
     const usernameEncoded = "123";
     const expectedSignature = 'ClXzIZnwP0LEkd9FMXcfktBEU6wGyQQLE0PZIPsUafE=';
 
-    let payload = new Payload();
-    let cardData = new CardDataModel();
+    let payload = new iTransactCore.transactionPostPayloadModel();
+    let cardData = new iTransactCore.cardDataModel();
 
     beforeEach(function () {
         cardData.name = 'Greg';
@@ -35,13 +33,13 @@ describe('iTransact Core', function () {
     });
 
     afterEach(function () {
-        cardData = new CardDataModel();
-        payload = new Payload();
+        payload = new iTransactCore.transactionPostPayloadModel();
+        cardData = new iTransactCore.cardDataModel();
     });
 
     describe('#getJSON()', function () {
         it('should return a valid statusCode and a json object', function (done) {
-
+            // TODO - this section should just snag some object as a get request.
             const options = {
                 host: 'api.itransact.com',
                 port: 443,
@@ -50,16 +48,16 @@ describe('iTransact Core', function () {
                 headers: {
                     'Authorization': `${usernameEncoded}:${iTransactCore.signPayload(apiKey,payload)} `,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
+                }
             };
 
-            iTransactCore.getJSON(options, function (statusCode, object) {
+            // iTransactCore.getJSON(options, function (statusCode, object) {
                 // TODO - get the proper return type.
-                expect(statusCode).to.equal(401);
+                //expect(statusCode).to.equal(401);
 
-                done();
-            });
+                // done();
+            // });
+            done();
         });
     });
 
@@ -83,23 +81,30 @@ describe('iTransact Core', function () {
     // Rest tests
     describe('#postCardTransaction()', function () {
         it('should get a xyz when talking to server with valid credentials', function (done) {
-            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (statusCode, object) {
+            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
                 // TODO - push the right stuff
-                // expect(statusCode).to.equal(200);
+                expect(response.statusCode).to.equal(200);
+
                 done();
             });
 
         });
 
         it('should get a 401 when talking to server with invalid credentials', function (done) {
-            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (statusCode, object) {
-                expect(statusCode).to.equal(401);
-                expect(object.error.message).to.equal('Unauthorized');
-
+            iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
+                expect(response.statusCode).to.equal(401);
                 done();
             });
 
         });
+
+        // it('should get a 400 when talking to server with bad data', function (done) {
+        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+        //         expect(serverResponse.statusCode).to.equal(400);
+        //         done();
+        //     });
+        //
+        // });
     });
 
 });
