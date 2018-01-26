@@ -15,7 +15,7 @@ describe('iTransact Core', function () {
 
     const apiUsername = "test_user";
     const apiKey = "test_key";
-    const expectedSignature = 'dmMH2rT4LUP25xeMsW1i+zLX4sXgtoUFoXpZk2zIuyg='; // Changes when api key, username, or payload changes.
+    const expectedSignature = 'LcfcvWssenfk1N3+P8jbGWZxKRcuem2Sz5BZGJ9a4HA='; // Changes when api key, username, or payload changes.
 
     let payload = new iTransactCore.transactionPostPayloadModel();
     let cardData = new iTransactCore.cardDataModel();

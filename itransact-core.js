@@ -13,6 +13,7 @@ const transactions_get_endpoint = `${transactions_post_endpoint}/`; // Add id to
 
 // Public models for convenience
 exports.cardDataModel = require('./models/card-data');
+exports.addressDataModel = require('./models/address-data');
 exports.transactionPostPayloadModel = require('./models/transaction-post-payload');
 
 // Exports

@@ -11,9 +11,9 @@
 const crypto = require('crypto');
 
 // Store this somewhere safe.
-const api_key = 'test_apikey';
-const api_username = 'test_username';
-const expectedSignature = 'CtWScJ95V4lRZ181QN1iriN4EGyX1YMU2pkvDlh7dKE='; // Note - As the payload or key changes, the expectedSignature also changes
+const api_username = 'test_user';
+const api_key = 'test_key';
+const expectedSignature = 'LcfcvWssenfk1N3+P8jbGWZxKRcuem2Sz5BZGJ9a4HA='; // Note - As the payload or key changes, the expectedSignature also changes
 const exampleJsonPayload = {
     'amount': '1000',
     'card': {
@@ -22,6 +22,9 @@ const exampleJsonPayload = {
         'cvv': '123',
         'exp_month': '11',
         'exp_year': '2020'
+    },
+    'address': { // Optional - postal code required if loopback / sandbox / demo account
+        'postal_code': '84025'
     }
 };
 
