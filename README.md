@@ -4,7 +4,7 @@ As a quick helper for our NodeJS community to get up and running even faster in 
 
 More details at [iTransact Developer API](http://developers.itransact.com/api-reference/#operation/postTransactions)
 
-[![EMV Teaser](images/animation-dip_0-60.gif)]
+![EMV Teaser](images/animation-dip_0-60.gif)
 
 ## Features
 - [NodeJS](https://nodejs.org/en/)
