@@ -4,7 +4,7 @@ As a quick helper for our NodeJS community to get up and running even faster in 
 
 More details at [iTransact Developer API](http://developers.itransact.com/api-reference/#operation/postTransactions)
 
-![EMV Teaser](images/animation-dip_0-60.gif)
+<!-- ![EMV Teaser](images/animation-dip_0-60.gif) -->
 
 ## Features
 - [NodeJS](https://nodejs.org/en/)
@@ -31,7 +31,11 @@ Download the zip, or use git submodules to pull the SDK into your project.
 Here is an example implementation:
 
 (see `/examples` for more)
-#### Simple post transaction
+
+#### DIY Example without iTransact SDK
+[DIY Example](examples/diy-implementation.js)
+
+#### Post transaction with iTransact SDK
 ```javascript
 "use strict";
 const itransact = require('itransact-core');
@@ -63,7 +67,7 @@ let fooCallback = function (response) {
 itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
 ```
 
-#### Simple sign payload
+#### Signing payload with iTransact SDK (doesn't post transaction)
 ```javascript
 "use strict";
 const itransact = require('itransact-core');
