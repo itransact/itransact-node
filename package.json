@@ -1,6 +1,6 @@
 {
   "name": "itransact-node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This is an SDK for authenticating with iTransact's API",
   "main": "itransact-core.js",
   "scripts": {

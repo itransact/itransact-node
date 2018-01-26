@@ -35,8 +35,8 @@ Here is an example implementation:
 const itransact = require('itransact-core');
 
 // Store these somewhere safe.
-const api_username = 'test_username';
-const api_key = 'test_apikey';
+const api_username = 'test_user';
+const api_key = 'test_key';
 
 // You can use your own JSON Model, or use the included models.
 const cardData = new itransact.cardDataModel();
@@ -45,6 +45,10 @@ cardData.number = '4111111111111111';
 cardData.cvv = '123';
 cardData.exp_month = '11';
 cardData.exp_year = '2020';
+
+// Address is optional, unless using loopback /sandbox / demo account.
+const addressData = new itransact.addressDataModel();
+addressData.postal_code = '84025';
 
 const payload = new itransact.transactionPostPayloadModel();
 payload.amount = '1000';
@@ -63,7 +67,7 @@ itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
 const itransact = require('itransact-core');
 
 // Store this somewhere safe.
-const api_key = 'test_apikey';
+const api_key = 'test_key';
 
 // You can use your own JSON Model, or use the included models.
 const payload = {
@@ -74,6 +78,9 @@ const payload = {
         cvv: '123',
         exp_month: '11',
         exp_year: '2020'
+    },
+    'address': { // Address is optional, unless using loopback /sandbox / demo account.
+        'postal_code': '84025'
     }
 };
 
@@ -81,7 +88,9 @@ const payload = {
 let payloadSignature = itransact.signPayload(api_key, payload);
 ```
 
-*Note - expected signature changes every time the api_username, api_key, and payload changes in any way. It is only included here for testing.* 
+*Note - expected signature changes every time the api_username, api_key, and payload changes in any way. It is only included here for testing.*
+
+*Demo Account Note - Loopback, Sandbox, and Demo accounts require postal_code, otherwise you will see an error similar to - "ZIP REQUIRED FOR KEYED TRANSACTION"*
 
 
 #### Example Response
@@ -125,6 +134,21 @@ Check out the files in `/examples` for other ideas for implementation.
 Unit tests on this project are run using Mocha. You can find each test in the `/test` folder.
 
 After doing an npm install mocha, and chai will be available to run using the following command. 
+
+
+```bash
+npm test
+```
+
+Alternative Methods:
+
+```bash
+npm test-report
+```
+
+```bash
+npm test-check-coverage
+```
 
 ```bash
 ./node_modules/.bin/mocha --reporter spec
