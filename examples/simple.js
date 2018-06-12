@@ -17,10 +17,15 @@ cardData.exp_year = '2020';
 const addressData = new itransact.addressDataModel();
 addressData.postal_code = '84025';
 
+const metaData = new itransact.metaDataModel();
+metaData.email = "example@itransact.com";
+
 const payload = new itransact.transactionPostPayloadModel();
 payload.amount = '1000';
 payload.card = cardData;
 payload.address = addressData;
+payload.metadata = metaData; // Optional
+payload.send_customer_receipt = true; // Optional - default: false - requires email in metadata
 
 // IF you want to just sign the payload
 let payloadSignature = itransact.signPayload(api_key, payload);

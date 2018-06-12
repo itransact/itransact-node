@@ -14,11 +14,12 @@ const transactions_get_endpoint = `${transactions_post_endpoint}/`; // Add id to
 // Public models for convenience
 exports.cardDataModel = require('./models/card-data');
 exports.addressDataModel = require('./models/address-data');
+exports.metaDataModel = require('./models/meta-data');
 exports.transactionPostPayloadModel = require('./models/transaction-post-payload');
 
 // Exports
 exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) {
-    const usernameEncoded = new Buffer(apiUsername).toString('base64');
+    const usernameEncoded = this.encodeUsername(apiUsername);
     const payloadSignature = exports.signPayload(apiKey, payload);
     const payloadJsonString = JSON.stringify(payload);
 
@@ -41,4 +42,8 @@ exports.signPayload = function (apiKey, payload) {
     // Return payload and signature on that object.
     const hmac = crypto.createHmac('sha256', apiKey).update(JSON.stringify(payload));
     return hmac.digest('base64');
+};
+
+exports.encodeUsername = function (apiUsername) {
+    return new Buffer(apiUsername).toString('base64');
 };
