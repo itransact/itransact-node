@@ -38,7 +38,7 @@ Here is an example implementation:
 #### Post transaction with iTransact SDK
 ```javascript
 "use strict";
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store these somewhere safe.
 const api_username = 'test_user';
@@ -77,7 +77,7 @@ itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
 #### Signing payload with iTransact SDK (doesn't post transaction)
 ```javascript
 "use strict";
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store this somewhere safe.
 const api_key = 'test_key';

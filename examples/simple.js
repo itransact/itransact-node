@@ -1,5 +1,5 @@
 "use strict";
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store these somewhere safe.
 const api_username = 'test_user';
