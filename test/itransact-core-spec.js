@@ -15,10 +15,12 @@ describe('iTransact Core', function () {
 
     const apiUsername = "test_user";
     const apiKey = "test_key";
-    const expectedSignature = 'LcfcvWssenfk1N3+P8jbGWZxKRcuem2Sz5BZGJ9a4HA='; // Changes when api key, username, or payload changes.
+    const expectedPayloadSignature = 'TIiC3HuXTg9FYxWr4HUDRcrICU215y8xp2ToCHP+n/M='; // Changes when api key, username, or payload changes.
 
     let payload = new iTransactCore.transactionPostPayloadModel();
     let cardData = new iTransactCore.cardDataModel();
+    let addressData = new iTransactCore.addressDataModel();
+    let metaData = new iTransactCore.metaDataModel();
 
     beforeEach(function () {
         cardData.name = 'Greg';
@@ -27,19 +29,31 @@ describe('iTransact Core', function () {
         cardData.exp_month = '11';
         cardData.exp_year = '2020';
 
+        addressData.line1 = "PO Box 999";
+        addressData.city = "Farmington";
+        addressData.state = "UT";
+        addressData.postal_code = "84025";
+
+        metaData.email = "example@itransact.com";
+
         payload.amount = '1000';
         payload.card = cardData;
+        payload.address = addressData;
+        payload.metadata = metaData;
+
     });
 
     afterEach(function () {
         payload = new iTransactCore.transactionPostPayloadModel();
         cardData = new iTransactCore.cardDataModel();
+        addressData = new iTransactCore.addressDataModel();
+        metaData = new iTransactCore.metaDataModel();
     });
 
     describe('#signPayload()', function () {
         it('should create hmac using payload and api', function (done) {
             const actualSignature = iTransactCore.signPayload(apiKey,payload);
-            expect(expectedSignature).to.equal(actualSignature);
+            expect(expectedPayloadSignature).to.equal(actualSignature);
 
             done()
         });
@@ -47,45 +61,51 @@ describe('iTransact Core', function () {
         it('should create a unique hmac for every character changed', function (done) {
             payload.amount = '10001'; // add 1 character to the payload
             const actualSignature = iTransactCore.signPayload(apiKey,payload);
-            expect(expectedSignature).to.not.equal(actualSignature);
+            expect(expectedPayloadSignature).to.not.equal(actualSignature);
 
             done()
         });
     });
 
-    // Rest tests
+    describe('#encodeUsername()', function () {
+        it('should return a base64 encoded string for the username', function (done) {
+            const actualEncoding = iTransactCore.encodeUsername(apiUsername);
+            expect(expectedUsernameEncoded).to.equal(actualEncoding);
+
+            done()
+        });
+    });
+
+    // REST tests
     describe('#postCardTransaction()', function () {
-        // it('should get a xyz when talking to server with valid credentials', function (done) {
-        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
-        //         expect(response.statusCode).to.equal(200);
-        //         done();
-        //     });
-        //
-        // });
-        //
-        // it('should get a 401 when talking to server with invalid credentials', function (done) {
-        //     iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
-        //         expect(response.statusCode).to.equal(401);
-        //         done();
-        //     });
-        //
-        // });
-        //
-        // it('should get a 402 when talking to server with past due account credentials', function (done) {
-        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
-        //         expect(response.statusCode).to.equal(402);
-        //         done();
-        //     });
-        //
-        // });
-        //
-        // it('should get a 400 when talking to server with bad data', function (done) {
-        //     iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
-        //         expect(serverResponse.statusCode).to.equal(400);
-        //         done();
-        //     });
-        //
-        // });
+        // Positive tests
+        xit('should get a 200 when talking to server with valid credentials', function (done) {
+            // We need to decide if we have a limited test user for these purposes.
+            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+
+        });
+
+        // Negative tests
+        it('should get a 401 when talking to server with invalid credentials', function (done) {
+            iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
+                expect(response.statusCode).to.equal(401);
+                done();
+            });
+
+        });
+
+        xit('should get a 401 when talking to server with bad data', function (done) {
+            payload.amount = null;
+            iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+                expect(response.statusCode).to.equal(400);
+                done();
+            });
+
+        });
     });
 
 });
+

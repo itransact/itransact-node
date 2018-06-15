@@ -38,7 +38,7 @@ Here is an example implementation:
 #### Post transaction with iTransact SDK
 ```javascript
 "use strict";
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store these somewhere safe.
 const api_username = 'test_user';
@@ -52,6 +52,10 @@ cardData.cvv = '123';
 cardData.exp_month = '11';
 cardData.exp_year = '2020';
 
+// MetaData is optional, customer emails will not be sent out without the following.
+const metaData = new itransact.metaDataModel();
+metaData.email = "example@test.com"; // Customer's email address for receipt delivery
+
 // Address is optional, unless using loopback /sandbox / demo account.
 const addressData = new itransact.addressDataModel();
 addressData.postal_code = '84025';
@@ -59,6 +63,9 @@ addressData.postal_code = '84025';
 const payload = new itransact.transactionPostPayloadModel();
 payload.amount = '1000';
 payload.card = cardData;
+payload.address = addressData; // Optional
+payload.metadata = metaData; // Optional
+payload.send_customer_receipt = true; // Optional - default: false
 
 let fooCallback = function (response) {
     // Do something with response here
@@ -70,7 +77,7 @@ itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
 #### Signing payload with iTransact SDK (doesn't post transaction)
 ```javascript
 "use strict";
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store this somewhere safe.
 const api_key = 'test_key';
@@ -87,7 +94,11 @@ const payload = {
     },
     'address': { // Address is optional, unless using loopback /sandbox / demo account.
         'postal_code': '84025'
-    }
+    },
+    'metadata': { // Optional
+        'email': 'example@itransact.com'
+    },
+    'send_customer_receipt': 'true' // Optional - default: false
 };
 
 // IF you want to just sign the payload
