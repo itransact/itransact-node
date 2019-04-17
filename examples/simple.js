@@ -1,5 +1,5 @@
 'use strict';
-const itransact = require('itransact-core');
+const itransact = require('itransact-node');
 
 // Store these somewhere safe.
 const apiUsername = 'test_user';
@@ -17,10 +17,15 @@ cardData.exp_year = '2020';
 const addressData = new itransact.AddressDataModel();
 addressData.postal_code = '84025';
 
+const metaData = new itransact.MetaDataModel();
+metaData.email = 'example@itransact.com';
+
 const payload = new itransact.TransactionPostPayloadModel();
 payload.amount = '1000';
 payload.card = cardData;
 payload.address = addressData;
+payload.metadata = metaData; // Optional
+payload.send_customer_receipt = true; // Optional - default: false - requires email in metadata
 
 // IF you want to just sign the payload
 // let payloadSignature = itransact.signPayload(apiKey, payload);

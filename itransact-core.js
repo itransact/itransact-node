@@ -14,11 +14,12 @@ const transactionsPostEndpoint = `/transactions`; // Add id to the end
 // Public models for convenience
 exports.CardDataModel = require('./models/card-data');
 exports.AddressDataModel = require('./models/address-data');
+exports.MetaDataModel = require('./models/meta-data');
 exports.TransactionPostPayloadModel = require('./models/transaction-post-payload');
 
 // Exports
 exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) {
-  const usernameEncoded = Buffer.from(apiUsername, 'base64');
+  const usernameEncoded = this.encodeUsername(apiUsername);
   const payloadSignature = exports.signPayload(apiKey, payload);
   const payloadJsonString = JSON.stringify(payload);
 
@@ -32,7 +33,7 @@ exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) 
     },
     body: payloadJsonString
   }, function (error, response, body) {
-    if (error) console.log(`itransact-core Error: ${error}`);
+    if (error) console.log(`itransact-core Errors: ${error}`);
     callback(response);
   });
 };
@@ -41,4 +42,8 @@ exports.signPayload = function (apiKey, payload) {
   // Return payload and signature on that object.
   const hmac = crypto.createHmac('sha256', apiKey).update(JSON.stringify(payload));
   return hmac.digest('base64');
+};
+
+exports.encodeUsername = function (apiUsername) {
+  return Buffer.from(apiUsername, 'base64');
 };
