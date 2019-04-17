@@ -1,5 +1,7 @@
 # iTransact SDK for NodeJS
 
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
 As a quick helper for our NodeJS community to get up and running even faster in your favorite dependency manager, we have created this API / SDK wrapper specifically tailored for NodeJS and Express. 
 
 More details at [iTransact Developer API](http://developers.itransact.com/api-reference/#operation/postTransactions)
@@ -136,6 +138,7 @@ Example successful `postResult` using the example above will return a 201 with t
 Check out the files in `/examples` for other ideas for implementation.
 
 ## Testing
+[![Try Payroc iTransact Node SDK on RunKit](https://badge.runkitcdn.com/itransact-node.svg)](https://npm.runkit.com/itransact-node)
 
 Unit tests on this project are run using Mocha. You can find each test in the `/test` folder.
 
