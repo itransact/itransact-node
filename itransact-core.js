@@ -4,13 +4,6 @@
 const crypto = require('crypto');
 const request = require('request');
 
-// Endpoints
-const baseEndpoint = 'api.itransact.com';
-// const tokenPostEndpoint = `/tokens`;
-// const tokenGetEndpoint = `${tokenPostEndpoint}/`; // Add id to the end
-const transactionsPostEndpoint = `/transactions`; // Add id to the end
-// const transactionsGetEndpoint = `${transactionsPostEndpoint}/`; // Add id to the end
-
 // Public models for convenience
 exports.CardDataModel = require('./models/card-data');
 exports.AddressDataModel = require('./models/address-data');
@@ -18,14 +11,14 @@ exports.MetaDataModel = require('./models/meta-data');
 exports.TransactionPostPayloadModel = require('./models/transaction-post-payload');
 
 // Exports
-exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) {
+exports.post_card_transaction = function (payload, apiUsername, apiKey, callback) {
   const usernameEncoded = this.encodeUsername(apiUsername);
   const payloadSignature = exports.signPayload(apiKey, payload);
   const payloadJsonString = JSON.stringify(payload);
 
   request({
     method: 'POST',
-    uri: 'https://' + baseEndpoint + transactionsPostEndpoint,
+    uri: `https://api.itransact.com/transactions`,
     headers: {
       'Authorization': `${usernameEncoded}:${payloadSignature} `,
       'Content-Type': 'application/json',
@@ -38,12 +31,12 @@ exports.postCardTransaction = function (payload, apiUsername, apiKey, callback) 
   });
 };
 
-exports.signPayload = function (apiKey, payload) {
+exports.sign_payload = function (apiKey, payload) {
   // Return payload and signature on that object.
   const hmac = crypto.createHmac('sha256', apiKey).update(JSON.stringify(payload));
   return hmac.digest('base64');
 };
 
-exports.encodeUsername = function (apiUsername) {
+exports.encode_username = function (apiUsername) {
   return Buffer.from(apiUsername, 'base64');
 };

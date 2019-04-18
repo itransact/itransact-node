@@ -10,11 +10,8 @@
 // Node Core Library
 const crypto = require('crypto');
 
-// Store this somewhere safe.
-// const apiUsername = 'test_user';
-const apiKey = 'test_key';
-const expectedSignature = 'OHlO1iX5WVxiafCGm15fFnPzHJyhCuHSsNmmP3jefnA='; // Note - As the payload or key changes, the expectedSignature also changes
-const exampleJsonPayload = {
+const EXPECTED_SIGNATURE = 'OHlO1iX5WVxiafCGm15fFnPzHJyhCuHSsNmmP3jefnA='; // Note - As the payload or key changes, the expectedSignature also changes
+const EXAMPLE_JSON_PAYLOAD = {
   'amount': '1000',
   'card': {
     'name': 'Greg',
@@ -34,19 +31,20 @@ const exampleJsonPayload = {
 
 // NOTE - stringify will strip out any spaces - so make sure to stringify your json object when sending to the server or they may not match
 const hmac = crypto
-  .createHmac('sha256', apiKey)
-  .update(JSON.stringify(exampleJsonPayload));
+  .createHmac('sha256', process.env.API_KEY)
+  .update(JSON.stringify(EXAMPLE_JSON_PAYLOAD));
 
-const actualSignature = hmac.digest('base64');
+const ACTUAL_SIGNATURE = hmac.digest('base64');
 
-if (expectedSignature === actualSignature) {
+// Optional - Some quick test messages to see if everything looks right
+if (EXPECTED_SIGNATURE === ACTUAL_SIGNATURE) {
   console.log(`
         Success!
-        Signature: ${actualSignature}
+        Signature: ${ACTUAL_SIGNATURE}
     `);
 } else {
   console.log('Failure!\n');
   console.log('Did you change the payload, username or api key?\n');
-  console.log('Expected Signature: ' + expectedSignature + '\n');
-  console.log('Actual Signature: ' + actualSignature + '\n');
+  console.log('Expected Signature: ' + EXPECTED_SIGNATURE + '\n');
+  console.log('Actual Signature: ' + ACTUAL_SIGNATURE + '\n');
 }

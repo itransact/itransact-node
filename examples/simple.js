@@ -1,9 +1,9 @@
 'use strict';
 const itransact = require('itransact-node');
 
-// Store these somewhere safe.
-const apiUsername = 'test_user';
-const apiKey = 'test_key';
+// Store these somewhere safe - like in environment variables - committing plain text user names and passwords to vcs is discouraged.
+const _api_username = 'test_user';
+const _api_key = 'test_key';
 
 // You can use your own JSON Model, or use the included models.
 const cardData = new itransact.CardDataModel();
@@ -35,4 +35,4 @@ let fooCallback = function (response) {
   // Do something with response here
 };
 
-itransact.postCardTransaction(payload, apiUsername, apiKey, fooCallback); // That's it!
+itransact.post_card_transaction(payload, _api_username, _api_key, fooCallback); // That's it!

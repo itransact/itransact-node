@@ -5,6 +5,7 @@ const afterEach = mocha.afterEach;
 const beforeEach = mocha.beforeEach;
 const describe = mocha.describe;
 const it = mocha.it;
+const xit = mocha.xit;
 
 // CHAI
 // const assert = require('chai').assert;
