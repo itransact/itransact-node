@@ -1,10 +1,9 @@
 # iTransact SDK for NodeJS
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 As a quick helper for our NodeJS community to get up and running even faster in your favorite dependency manager, we have created this API / SDK wrapper specifically tailored for NodeJS and Express. 
 
 More details at [iTransact Developer API](http://developers.itransact.com/api-reference/#operation/postTransactions)
-
-<!-- ![EMV Teaser](images/animation-dip_0-60.gif) -->
 
 ## Features
 - [NodeJS](https://nodejs.org/en/)
@@ -45,7 +44,7 @@ const api_username = 'test_user';
 const api_key = 'test_key';
 
 // You can use your own JSON Model, or use the included models.
-const cardData = new itransact.cardDataModel();
+const cardData = new itransact.CardDataModel();
 cardData.name = 'Greg';
 cardData.number = '4111111111111111';
 cardData.cvv = '123';
@@ -53,14 +52,14 @@ cardData.exp_month = '11';
 cardData.exp_year = '2020';
 
 // MetaData is optional, customer emails will not be sent out without the following.
-const metaData = new itransact.metaDataModel();
+const metaData = new itransact.MetaDataModel();
 metaData.email = "example@test.com"; // Customer's email address for receipt delivery
 
 // Address is optional, unless using loopback /sandbox / demo account.
-const addressData = new itransact.addressDataModel();
+const addressData = new itransact.AddressDataModel();
 addressData.postal_code = '84025';
 
-const payload = new itransact.transactionPostPayloadModel();
+const payload = new itransact.TransactionPostPayloadModel();
 payload.amount = '1000';
 payload.card = cardData;
 payload.address = addressData; // Optional
@@ -71,7 +70,7 @@ let fooCallback = function (response) {
     // Do something with response here
 };
 
-itransact.postCardTransaction(payload, api_username, api_key, fooCallback);
+itransact.post_card_transaction(payload, api_username, api_key, fooCallback);
 ```
 
 #### Signing payload with iTransact SDK (doesn't post transaction)
@@ -147,6 +146,7 @@ Example successful `postResult` using the example above will return a 201 with t
 Check out the files in `/examples` for other ideas for implementation.
 
 ## Testing
+[![Try Payroc iTransact Node SDK on RunKit](https://badge.runkitcdn.com/itransact-node.svg)](https://npm.runkit.com/itransact-node)
 
 Unit tests on this project are run using Mocha. You can find each test in the `/test` folder.
 
