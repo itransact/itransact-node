@@ -28,7 +28,7 @@ payload.metadata = metaData; // Optional
 payload.send_customer_receipt = true; // Optional - default: false - requires email in metadata
 
 // IF you want to just sign the payload
-// let payloadSignature = itransact.signPayload(apiKey, payload);
+// let payloadSignature = itransact.sign_payload(apiKey, payload);
 
 // If you want to post a card transaction
 let fooCallback = function (response) {
