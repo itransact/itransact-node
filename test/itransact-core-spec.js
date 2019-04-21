@@ -51,9 +51,9 @@ describe('iTransact Core', function () {
     metaData = new iTransactCore.MetaDataModel();
   });
 
-  describe('#signPayload()', function () {
+  describe('#sign_payload()', function () {
     it('should create hmac using payload and api', function (done) {
-      const actualSignature = iTransactCore.signPayload(apiKey, payload);
+      const actualSignature = iTransactCore.sign_payload(apiKey, payload);
       expect(expectedPayloadSignature).to.equal(actualSignature);
 
       done();
@@ -61,16 +61,16 @@ describe('iTransact Core', function () {
 
     it('should create a unique hmac for every character changed', function (done) {
       payload.amount = '10001'; // add 1 character to the payload
-      const actualSignature = iTransactCore.signPayload(apiKey, payload);
+      const actualSignature = iTransactCore.sign_payload(apiKey, payload);
       expect(expectedPayloadSignature).to.not.equal(actualSignature);
 
       done();
     });
   });
 
-  describe('#encodeUsername()', function () {
+  describe('#encode_username()', function () {
     it('should return a base64 encoded string for the username', function (done) {
-      const actualEncoding = iTransactCore.encodeUsername(apiUsername);
+      const actualEncoding = iTransactCore.encode_username(apiUsername);
       expect(expectedUsernameEncoded).to.equal(actualEncoding);
 
       done();
@@ -78,11 +78,11 @@ describe('iTransact Core', function () {
   });
 
   // REST tests
-  describe('#postCardTransaction()', function () {
+  describe('#post_card_transaction()', function () {
     // Positive tests
     xit('should get a 200 when talking to server with valid credentials', function (done) {
       // We need to decide if we have a limited test user for these purposes.
-      iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+      iTransactCore.post_card_transaction(payload, apiUsername, apiKey, function (response) {
         expect(response.statusCode).to.equal(200);
         done();
       });
@@ -90,7 +90,7 @@ describe('iTransact Core', function () {
 
     // Negative tests
     it('should get a 401 when talking to server with invalid credentials', function (done) {
-      iTransactCore.postCardTransaction(payload, 'abcd', 'efg', function (response) {
+      iTransactCore.post_card_transaction(payload, 'abcd', 'efg', function (response) {
         expect(response.statusCode).to.equal(401);
         done();
       });
@@ -98,7 +98,7 @@ describe('iTransact Core', function () {
 
     xit('should get a 401 when talking to server with bad data', function (done) {
       payload.amount = null;
-      iTransactCore.postCardTransaction(payload, apiUsername, apiKey, function (response) {
+      iTransactCore.post_card_transaction(payload, apiUsername, apiKey, function (response) {
         expect(response.statusCode).to.equal(400);
         done();
       });

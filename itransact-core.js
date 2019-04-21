@@ -12,8 +12,8 @@ exports.TransactionPostPayloadModel = require('./models/transaction-post-payload
 
 // Exports
 exports.post_card_transaction = function (payload, apiUsername, apiKey, callback) {
-  const usernameEncoded = this.encodeUsername(apiUsername);
-  const payloadSignature = exports.signPayload(apiKey, payload);
+  const usernameEncoded = this.encode_username(apiUsername);
+  const payloadSignature = exports.sign_payload(apiKey, payload);
   const payloadJsonString = JSON.stringify(payload);
 
   request({
