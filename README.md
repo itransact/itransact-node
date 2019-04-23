@@ -1,5 +1,6 @@
 # iTransact SDK for NodeJS
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+[![Try Payroc iTransact Node SDK on RunKit](https://badge.runkitcdn.com/itransact-node.svg)](https://npm.runkit.com/itransact-node)
 
 As a quick helper for our NodeJS community to get up and running even faster in your favorite dependency manager, we have created this API / SDK wrapper specifically tailored for NodeJS and Express. 
 
@@ -50,6 +51,8 @@ cardData.number = '4111111111111111';
 cardData.cvv = '123';
 cardData.exp_month = '11';
 cardData.exp_year = '2020';
+// Note that you can access the json ready object on any custom class model by calling .toJson()
+// ex: cardData.toJson(), metaData.toJson(), etc.
 
 // MetaData is optional, customer emails will not be sent out without the following.
 const metaData = new itransact.MetaDataModel();
@@ -146,18 +149,25 @@ Example successful `postResult` using the example above will return a 201 with t
 Check out the files in `/examples` for other ideas for implementation.
 
 ## Testing
-[![Try Payroc iTransact Node SDK on RunKit](https://badge.runkitcdn.com/itransact-node.svg)](https://npm.runkit.com/itransact-node)
+Unit tests on this project are run using Mocha. You can find each test in the `/test` folder. 
 
-Unit tests on this project are run using Mocha. You can find each test in the `/test` folder.
+*Note: We utilize the npm package [dotenv](https://www.npmjs.com/package/dotenv) for testing different environments. 
+Once you add these environment variables using your own `.env` using the  [.env.default](.env.default) file for reference the tests will function properly.
+You are also able to add the required variables it to your PATH directly to achieve the same effect*
 
-After doing an npm install mocha, and chai will be available to run using the following command. 
+Example `.env` file:
+```dotenv
+# Used in unit tests.
+ITRANSACT_ENVIRONMENT=production
+ITRANSACT_API_USERNAME=your_api_username
+ITRANSACT_API_KEY=your_api_key
+```
 
+You can run the following commands from [package.json](package.json) to execute the tests. 
 
 ```bash
 npm test
 ```
-
-Alternative Methods:
 
 ```bash
 npm test-report

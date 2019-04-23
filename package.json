@@ -1,6 +1,6 @@
 {
   "name": "itransact-node",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "This is an SDK for authenticating with iTransact's API",
   "main": "itransact-core.js",
   "scripts": {
@@ -46,6 +46,7 @@
     "nyc": "^14.0.0"
   },
   "dependencies": {
+    "dotenv": "^7.0.0",
     "request": "^2.88.0"
   }
 }
