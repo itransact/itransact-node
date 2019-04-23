@@ -1,4 +1,5 @@
 # iTransact SDK for NodeJS
+[![CircleCI](https://circleci.com/gh/itransact/itransact-node.svg?style=svg)](https://circleci.com/gh/itransact/itransact-node)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 [![Try Payroc iTransact Node SDK on RunKit](https://badge.runkitcdn.com/itransact-node.svg)](https://npm.runkit.com/itransact-node)
 
