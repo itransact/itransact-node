@@ -19,7 +19,6 @@ class CardData {
       'exp_year': this.exp_year
     };
   }
-  // TODO: Add expiration date validation
 
   expirationValidation() {
     let today = new Date();
