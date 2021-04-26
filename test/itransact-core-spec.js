@@ -2,9 +2,9 @@
 
 require('dotenv').config();
 const { afterEach, beforeEach, describe, it } = require('mocha');
-const { expect } = require('chai');
+const { expect, assert } = require('chai');
 
-describe('#iTransactCore Test Suite', function () {
+describe('#iTransactCore Test Suite', function (fn, message) {
   const iTransactCore = require('../itransact-core');
 
   const defaultAmount = '1000';
@@ -14,8 +14,15 @@ describe('#iTransactCore Test Suite', function () {
   const prodUrl = 'https://api.itransact.com';
   const apiUsername = 'test_user';
   const apiKey = 'test_key';
-  const expectedPayloadSignature = '6ns1KeecRlcOOwvLYRWy4B3nh1mL8TToEW71RSRfLZo='; // Changes when api key, username, or payload changes.
+  const expectedPayloadSignature = 'ddhDmuSpWmGxiNQqbJrwtQItKQ/+UV41W121nuF0zZ0='; // Changes when api key, username, or payload changes.
   const expectedUsernameEncoded = Buffer.from(apiUsername, 'utf8').toString('base64');
+  const expectedCardDataPayload = {
+    'name': 'Greg',
+    'number': '4111111111111111',
+    'cvv': '123',
+    'exp_month': '11',
+    'exp_year': '2024'
+  };
 
   let payload = new iTransactCore.TransactionPostPayloadModel();
   let cardData = new iTransactCore.CardDataModel();
@@ -29,7 +36,7 @@ describe('#iTransactCore Test Suite', function () {
     cardData.number = '4111111111111111';
     cardData.cvv = '123';
     cardData.exp_month = '11';
-    cardData.exp_year = '2020';
+    cardData.exp_year = '2024';
 
     addressData.line1 = 'PO Box 999';
     addressData.city = 'Farmington';
@@ -81,6 +88,64 @@ describe('#iTransactCore Test Suite', function () {
     });
   });
 
+  describe('#CardData.toJson()', function (fn, message) {
+    it('should throw error for invalid year', function (done) {
+      cardData.exp_year = '2000';
+      console.log('Expiration Year', cardData.exp_year);
+      assert.throws(() => cardData.toJson(), 'Card Expiration Date is invalid');
+      done();
+    });
+    it('should throw error for invalid month greater than 12', function (done) {
+      cardData.exp_month = '13';
+      console.log('Expiration Month', cardData.exp_month);
+      assert.throws(() => cardData.toJson(), 'Card Expiration Date is invalid');
+      done();
+    });
+    it('should throw error for undefined month and year', function (done) {
+      cardData.exp_month = undefined;
+      cardData.exp_year = undefined;
+      console.log('Expiration Month', cardData.exp_month);
+      assert.throws(() => cardData.toJson(), 'Card Expiration Date is invalid');
+      done();
+    });
+    it('should throw error for invalid exp month and year', function (done) {
+      cardData.exp_month = 'BAD MONTH';
+      cardData.exp_year = 'BAD YEAR';
+      console.log('Expiration Month', cardData.exp_month);
+      assert.throws(() => cardData.toJson(), 'Card Expiration Date is invalid');
+      done();
+    });
+    it('should throw error for invalid month of this year', function (done) {
+      var today = new Date();
+      cardData.exp_year = (today.getFullYear()).toString();
+      cardData.exp_month = (today.getMonth()).toString();
+      console.log('Expiration Date:', cardData.exp_month, cardData.exp_year);
+      assert.throws(() => cardData.toJson(), 'Card Expiration Date is invalid');
+      done();
+    });
+    it('should return valid card data payload with expiration year set to this year', function (done) {
+      var today = new Date();
+      cardData.exp_year = (today.getFullYear()).toString();
+      cardData.exp_month = (today.getMonth() + 2).toString();
+      const expectedCardDataPayload = {
+        'name': 'Greg',
+        'number': '4111111111111111',
+        'cvv': '123',
+        'exp_month': (today.getMonth() + 2).toString(),
+        'exp_year': (today.getFullYear()).toString()
+      };
+      const actualData = cardData.toJson();
+      expect(expectedCardDataPayload, 'Card Data payload should match with valid dates').to.eql(actualData);
+      done();
+    });
+    it('should return card data object', function (done) {
+      console.log('Expiration Date:', cardData.exp_month, cardData.exp_year);
+      const actualData = cardData.toJson();
+      expect(expectedCardDataPayload, 'Card Data payload should match with valid dates').to.eql(actualData);
+      done();
+    });
+  });
+
   describe('#sign_payload()', function () {
     it('should create hmac using payload and api', function (done) {
       const actualSignature = iTransactCore.sign_payload(apiKey, payload);
@@ -113,15 +178,19 @@ describe('#iTransactCore Test Suite', function () {
     });
 
     it('should get a 401 when talking to server with invalid credentials', function (done) {
-      iTransactCore.post_card_transaction(payload, 'abcd', 'efg', function (response) {
+      iTransactCore.post_card_transaction(payload, 'abcdasdf', 'efgasdf', function (response) {
         expect(response.statusCode, 'Status code should return a 401').to.equal(401);
         done();
       });
     });
 
     it('should get a 400 when talking to server with bad data', function (done) {
-      payload.amount = null;
-      iTransactCore.post_card_transaction(payload, process.env.ITRANSACT_API_USERNAME, process.env.ITRANSACT_API_KEY, function (response) {
+      let badPayload = new iTransactCore.TransactionPostPayloadModel(defaultAmount);
+      badPayload.card = '';
+      badPayload.address = new iTransactCore.AddressDataModel();
+      badPayload.metadata = metaData;
+      badPayload.card = new iTransactCore.CardDataModel('', '', '123', '12', '2034');
+      iTransactCore.post_card_transaction(badPayload, process.env.ITRANSACT_API_USERNAME, process.env.ITRANSACT_API_KEY, function (response) {
         console.log(response);
         expect(response.statusCode, 'only works if your username and password match your environment.').to.equal(400);
         done();
